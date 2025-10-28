@@ -125,5 +125,12 @@ main {
   @apply flex flex-col gap-4; /* column track */
 }
 
-.marquee-animate-up { animation: marquee-up 18s linear infinite; }
-.marquee-animate-down { animation: marquee-down 18s linear infinite; }
+.marquee-animate-up { animation: marquee-up 28s linear infinite; }
+.marquee-animate-down { animation: marquee-down 28s linear infinite; }
+
+/* Custom testimonial vertical animations (server-safe) */
+@keyframes scroll-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.animate-scroll-up { animation: scroll-up 55s linear infinite; }
+.animate-scroll-down-medium { animation: scroll-down 48s linear infinite; }
+.animate-scroll-up-fast { animation: scroll-up 40s linear infinite; }

@@ -1,4 +1,4 @@
-import { Twitter } from 'lucide-react';
+// Social icon removed per request
 
 interface Testimonial {
   name: string;
@@ -78,40 +78,36 @@ const testimonials: Testimonial[] = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-white text-black py-12 px-4">
+    <section className="bg-linear-to-b from-white via-zinc-50 to-zinc-100 text-black py-12 pb-28 md:pb-32 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Heres what some of our users have to say about Aceternity UI:
-          </h2>
-        </div>
 
         {/* Vertical Marquee Columns */}
-        <div className="marquee-mask marquee-fade-y h-96 md:h-[28rem] lg:h-[32rem]">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Col 1 - up */}
-            <div className="marquee-track-y marquee-animate-up">
-              {[...testimonials, ...testimonials].slice(0, testimonials.length + 4).map((t, i) => (
+        <div className="relative h-[820px] md:h-[900px] overflow-hidden">
+           {/* Top gradient fade */}
+           <div className="absolute top-0 left-0 right-0 h-24 bg-linear-to-b from-white via-white/70 to-transparent z-10 pointer-events-none" />
+           
+           {/* Bottom gradient fade */}
+           <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-white via-white/70 to-transparent z-10 pointer-events-none" />
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 h-full py-8">
+            {/* Column 1 - moves up slowly */}
+            <div className="flex flex-col gap-4 animate-scroll-up">
+              {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
                 <Card key={`c1-${i}`} t={t} />
               ))}
             </div>
-            {/* Col 2 - down */}
-            <div className="marquee-track-y marquee-animate-down">
-              {[...testimonials.slice(3), ...testimonials.slice(0, 3), ...testimonials].slice(0, testimonials.length + 4).map((t, i) => (
+
+            {/* Column 2 - moves down medium speed */}
+            <div className="flex flex-col gap-4 animate-scroll-down-medium">
+              {[...testimonials.slice(3), ...testimonials, ...testimonials, ...testimonials].map((t, i) => (
                 <Card key={`c2-${i}`} t={t} />
               ))}
             </div>
-            {/* Col 3 - up */}
-            <div className="marquee-track-y marquee-animate-up">
-              {[...testimonials.slice(6), ...testimonials.slice(0, 6), ...testimonials].slice(0, testimonials.length + 4).map((t, i) => (
+
+            {/* Column 3 - moves up fast */}
+            <div className="flex flex-col gap-4 animate-scroll-up-fast">
+              {[...testimonials.slice(6), ...testimonials, ...testimonials, ...testimonials].map((t, i) => (
                 <Card key={`c3-${i}`} t={t} />
-              ))}
-            </div>
-            {/* Col 4 - down */}
-            <div className="marquee-track-y marquee-animate-down">
-              {[...testimonials.slice(9), ...testimonials.slice(0, 9), ...testimonials].slice(0, testimonials.length + 4).map((t, i) => (
-                <Card key={`c4-${i}`} t={t} />
               ))}
             </div>
           </div>
@@ -123,19 +119,18 @@ export default function Testimonials() {
 
 function Card({ t }: { t: Testimonial }) {
   return (
-    <div className="w-80 shrink-0 bg-white rounded-2xl p-5 border border-zinc-200 hover:border-zinc-300 transition-colors relative group shadow-sm">
-      <div className="absolute top-4 right-4">
-        <Twitter className="w-5 h-5 text-sky-500" fill="currentColor" />
-      </div>
+    <div className="w-full rounded-2xl p-5 border border-zinc-200 hover:border-zinc-300 bg-white/90 backdrop-blur-sm transition-colors relative group shadow-sm">
+      
       <div className="mb-4 flex items-start gap-3">
         <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200">
-          <div className="h-full w-full bg-linear-to-br from-purple-500 to-pink-500" />
+          <div className="h-full w-full bg-linear-to-br from-zinc-300 to-zinc-400" />
         </div>
+        
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1">
             <h3 className="truncate text-sm font-semibold">{t.name}</h3>
             {t.verified && (
-              <svg className="h-4 w-4 shrink-0 text-sky-500" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="h-4 w-4 shrink-0 text-zinc-500" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8.52 3.59c.8-.5 1.9-.5 2.68 0l1.9 1.2c.4.2.9.4 1.4.4h2.2c1 0 1.8.8 1.8 1.8v2.2c0 .5.1 1 .4 1.4l1.2 1.9c.5.8.5 1.9 0 2.68l-1.2 1.9c-.2.4-.4.9-.4 1.4v2.2c0 1-.8 1.8-1.8 1.8h-2.2c-.5 0-1 .1-1.4.4l-1.9 1.2c-.8.5-1.9.5-2.68 0l-1.9-1.2c-.4-.2-.9-.4-1.4-.4H4.8c-1 0-1.8-.8-1.8-1.8v-2.2c0-.5-.1-1-.4-1.4l-1.2-1.9c-.5-.8-.5-1.9 0-2.68l1.2-1.9c.2-.4.4-.9.4-1.4V4.8c0-1 .8-1.8 1.8-1.8h2.2c.5 0 1-.1 1.4-.4l1.9-1.2zM16.7 9.3c.4.4.4 1 0 1.4l-5 5c-.4.4-1 .4-1.4 0l-2-2c-.4-.4-.4-1 0-1.4.4-.4 1-.4 1.4 0l1.3 1.3 4.3-4.3c.4-.4 1-.4 1.4 0z" />
               </svg>
             )}
@@ -143,6 +138,7 @@ function Card({ t }: { t: Testimonial }) {
           <p className="truncate text-sm text-zinc-500">{t.username}</p>
         </div>
       </div>
+      
       <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-700">{t.content}</p>
     </div>
   );
