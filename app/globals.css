@@ -134,3 +134,18 @@ main {
 .animate-scroll-up { animation: scroll-up 55s linear infinite; }
 .animate-scroll-down-medium { animation: scroll-down 48s linear infinite; }
 .animate-scroll-up-fast { animation: scroll-up 40s linear infinite; }
+
+/* Gentle horizontal gradient shift for headings/wordmarks */
+@keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-x { animation: gradient-x 18s ease-in-out infinite; }
+
+/* Hero crossfade */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.hero-fade { animation: fadeIn 1200ms ease both; }

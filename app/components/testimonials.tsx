@@ -78,7 +78,7 @@ const testimonials: Testimonial[] = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-linear-to-b from-white via-zinc-50 to-zinc-100 text-black py-12 pb-28 md:pb-32 px-4">
+    <section className="bg-linear-to-b from-white via-zinc-50 to-zinc-100 text-black pt-6 md:pt-8 pb-28 md:pb-32 px-4">
       <div className="max-w-7xl mx-auto">
 
         {/* Vertical Marquee Columns */}
