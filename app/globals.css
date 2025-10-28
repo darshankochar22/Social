@@ -1,26 +1,129 @@
 @import "tailwindcss";
+/* Add this to your globals.css for footer positioning */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply flex flex-col;
 }
+
+#__next {
+  @apply flex flex-col min-h-screen;
+}
+
+main {
+  @apply flex-1;
+}
+
+/* Footer utility classes */
+.footer {
+  @apply mt-auto bg-black text-white;
+}
+
+.footer-inner {
+  @apply ml-auto max-w-6xl pl-6 pr-8 py-12 text-right;
+}
+
+.footer-grid {
+  @apply grid grid-cols-1 gap-8 md:grid-cols-5;
+}
+
+.footer-heading {
+  @apply mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400;
+}
+
+.footer-list {
+  @apply space-y-2;
+}
+
+.footer-link {
+  @apply text-sm text-gray-300 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+}
+
+.footer-toggle {
+  @apply rounded-md bg-white/5 px-3 py-2 text-xs font-medium text-gray-200 ring-1 ring-white/10 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+}
+
+.footer-divider {
+  @apply mt-10 border-t border-white/10 pt-6 text-center;
+}
+
+/* Marquee utilities */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.marquee-mask {
+  @apply relative overflow-hidden;
+}
+
+.marquee-fade:before,
+.marquee-fade:after {
+  content: "";
+  @apply pointer-events-none absolute top-0 h-full w-24; /* slimmer masks */
+}
+
+.marquee-fade:before {
+  left: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+}
+
+.marquee-fade:after {
+  right: 0;
+  background: linear-gradient(to left, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+}
+
+.marquee-track {
+  @apply flex shrink-0 gap-4 px-1; /* single row width > 100% */
+}
+
+.marquee-animate-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+.marquee-animate-right {
+  animation: marquee-right 30s linear infinite;
+}
+
+/* Vertical marquee */
+@keyframes marquee-up {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+@keyframes marquee-down {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+
+.marquee-fade-y:before,
+.marquee-fade-y:after {
+  content: "";
+  @apply pointer-events-none absolute left-0 w-full h-8; /* slimmer vertical masks */
+}
+
+.marquee-fade-y:before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+}
+
+.marquee-fade-y:after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+}
+
+.marquee-track-y {
+  @apply flex flex-col gap-4; /* column track */
+}
+
+.marquee-animate-up { animation: marquee-up 18s linear infinite; }
+.marquee-animate-down { animation: marquee-down 18s linear infinite; }
