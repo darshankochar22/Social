@@ -1,0 +1,35 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getDb } from "@/lib/mongodb";
+import { reelSchema } from "@/lib/schemas";
+import { ObjectId } from "mongodb";
+
+export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+	const db = await getDb();
+	const id = params.id;
+	if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+	const reel = await db.collection("reels").findOne({ _id: new ObjectId(id) });
+	if (!reel) return NextResponse.json({ error: "Not found" }, { status: 404 });
+	return NextResponse.json(reel);
+}
+
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+	const db = await getDb();
+	const id = params.id;
+	if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+	const json = await req.json();
+	const parsed = reelSchema.partial().safeParse({ ...json, updatedAt: new Date() });
+	if (!parsed.success) {
+		return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+	}
+	await db.collection("reels").updateOne({ _id: new ObjectId(id) }, { $set: parsed.data });
+	const updated = await db.collection("reels").findOne({ _id: new ObjectId(id) });
+	return NextResponse.json(updated);
+}
+
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+	const db = await getDb();
+	const id = params.id;
+	if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+	await db.collection("reels").deleteOne({ _id: new ObjectId(id) });
+	return NextResponse.json({ ok: true });
+}

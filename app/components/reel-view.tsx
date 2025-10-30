@@ -1,22 +1,60 @@
+"use client";
+
 import Reel from '@/app/components/reel';
+import { useState } from 'react';
 import { Heart, MessageCircle, Send, Bookmark } from 'lucide-react';
 
 type ReelViewProps = {
   src: string;
   title?: string;
   category?: string;
-  comments?: { id: number; author: string; handle: string; text: string; time: string }[];
+  id?: string;
 };
 
-export default function ReelView({ src, title = '', category = 'Reel' }: ReelViewProps) {
+export default function ReelView({ src, title = '', category = 'Reel', id = 'reel-demo' }: ReelViewProps) {
+  const [likes, setLikes] = useState(0);
+  const [isLiking, setIsLiking] = useState(false);
+
+  const getAccountId = async (): Promise<string> => {
+    try {
+      const res = await fetch('/api/auth/me', { cache: 'no-store' });
+      if (res.ok) {
+        const j = await res.json();
+        return j?.account?._id || 'demo-account';
+      }
+    } catch {}
+    return 'demo-account';
+  };
+
+  const likeReel = async () => {
+    if (isLiking) return;
+    setIsLiking(true);
+    try {
+      const accountId = await getAccountId();
+      const res = await fetch('/api/likes?count=1&targetType=reel&targetId=' + encodeURIComponent(id));
+      if (res.ok) {
+        const { count } = await res.json();
+        setLikes(count);
+      }
+      const postRes = await fetch('/api/likes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetType: 'reel', targetId: id, accountId })
+      });
+      if (postRes.ok) setLikes((c) => c + 1);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center py-12">
       <div className="relative mx-auto w-full max-w-[34rem]">
         <Reel src={src} title={title} category={category} />
         {/* right action bar */}
         <div className="absolute right-2 top-1/2 -translate-y-1/2 space-y-4 text-white">
-          <button className="flex flex-col items-center text-white/90 hover:text-white"><Heart className="h-6 w-6" /><span className="text-xs">9.4k</span></button>
-          <button className="flex flex-col items-center text-white/90 hover:text-white"><MessageCircle className="h-6 w-6" /><span className="text-xs">1.1k</span></button>
+          <button onClick={likeReel} disabled={isLiking} className="flex flex-col items-center text-white/90 hover:text-white"><Heart className="h-6 w-6" /><span className="text-xs">{likes}</span></button>
+          <button className="flex flex-col items-center text-white/90 hover:text-white"><MessageCircle className="h-6 w-6" /><span className="text-xs">Comment</span></button>
           <button className="flex flex-col items-center text-white/90 hover:text-white"><Send className="h-6 w-6" /><span className="text-xs">Share</span></button>
           <button className="flex flex-col items-center text-white/90 hover:text-white"><Bookmark className="h-6 w-6" /><span className="text-xs">Save</span></button>
         </div>

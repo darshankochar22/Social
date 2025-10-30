@@ -4,12 +4,6 @@ import Link from "next/link";
 import PostCard from "@/app/components/post-card";
 import type { Post } from "@/app/components/post-card";
 
-const users = [
-  { handle: "@sarah_anderson", avatar: "", verified: true },
-  { handle: "@alex", avatar: "", verified: false },
-  { handle: "@mia", avatar: "", verified: false },
-];
-
 const sampleImages = [
   "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1600&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1529336953121-ad5a0d43d0d2?q=80&w=1600&auto=format&fit=crop",
@@ -34,33 +28,43 @@ const sampleContents = [
 
 const feed: Post[] = Array.from({ length: 25 }, (_, idx) => {
   const i = idx + 1;
-  const img = sampleImages[idx % sampleImages.length];
   const content = sampleContents[idx % sampleContents.length];
+  // Deterministic values based on index to avoid hydration mismatch
+  const likes = 100 + ((idx * 43) % 900);
+  const comments = 10 + ((idx * 31) % 200);
+  const timestamp = ["5m", "1h", "3h", "12h", "1d", "2d"][idx % 6];
+  
+  // Mix different image counts to demonstrate variety
+  const imageCount = [1, 1, 2, 1, 3, 1, 2, 4, 1, 2, 1, 5, 1, 3, 2, 1, 4, 1, 2, 1, 3, 1, 2, 6, 1][idx];
+  const images = sampleImages.slice(0, Math.min(imageCount, sampleImages.length));
+  
   return {
     id: i,
     content,
-    image: img,
-    likes: Math.floor(100 + Math.random() * 900),
-    comments: Math.floor(10 + Math.random() * 200),
-    timestamp: ["5m", "1h", "3h", "12h", "1d", "2d"][idx % 6],
+    image: null, // Use images array instead
+    images: images,
+    likes,
+    comments,
+    timestamp,
   };
 });
 
 export default function HomeFeed() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 space-y-6">
-      {feed.map((post, i) => (
-        <div key={post.id} className="relative">
-          <PostCard post={post} />
-          <Link
-            href={`/post?id=${post.id}&content=${encodeURIComponent(post.content)}&image=${encodeURIComponent(
-              post.image ?? ""
-            )}&likes=${post.likes}&commentCount=${post.comments}&time=${encodeURIComponent(post.timestamp)}`}
-            className="absolute inset-0"
-            aria-label="Open post"
-          />
-        </div>
-      ))}
+      {feed.map((post) => {
+        const imagesParam = post.images?.join(',') || post.image || '';
+        return (
+          <div key={post.id} className="relative">
+            <PostCard post={post} />
+            <Link
+              href={`/post?id=${post.id}&content=${encodeURIComponent(post.content)}&images=${encodeURIComponent(imagesParam)}&likes=${post.likes}&commentCount=${post.comments}&time=${encodeURIComponent(post.timestamp)}`}
+              className="absolute inset-0"
+              aria-label="Open post"
+            />
+          </div>
+        );
+      })}
     </main>
   );
 }

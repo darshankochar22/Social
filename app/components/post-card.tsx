@@ -1,23 +1,117 @@
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
+import Image from 'next/image';
 
 export type Post = {
-  id: number;
+  id: number | string;
   content: string;
   image: string | null;
+  images?: string[]; 
   likes: number;
   comments: number;
   timestamp: string;
 };
 
 export default function PostCard({ post }: { post: Post }) {
+  // Handle both single image and multiple images
+  const images = post.images && post.images.length > 0 ? post.images : (post.image ? [post.image] : []);
+  
+  const renderImages = () => {
+    if (images.length === 0) return null;
+    
+    if (images.length === 1) {
+      // Single image - full width
+      return (
+        <div className="mt-3 relative w-full aspect-video overflow-hidden rounded-xl">
+          <Image 
+            src={images[0]} 
+            alt="Post content" 
+            fill
+            className="object-cover"
+          />
+        </div>
+      );
+    }
+    
+    if (images.length === 2) {
+      // Two images - side by side
+      return (
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          {images.map((img, idx) => (
+            <div key={idx} className="relative aspect-square overflow-hidden rounded-xl">
+              <Image 
+                src={img} 
+                alt={`Post content ${idx + 1}`} 
+                fill
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      );
+    }
+    
+    if (images.length === 3) {
+      // Three images - large + two small
+      return (
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="relative row-span-2 aspect-square overflow-hidden rounded-xl">
+            <Image 
+              src={images[0]} 
+              alt="Post content 1" 
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="relative aspect-square overflow-hidden rounded-xl">
+            <Image 
+              src={images[1]} 
+              alt="Post content 2" 
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="relative aspect-square overflow-hidden rounded-xl">
+            <Image 
+              src={images[2]} 
+              alt="Post content 3" 
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+      );
+    }
+    
+    // Four or more images - grid with overlay
+    return (
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        {images.slice(0, 4).map((img, idx) => (
+          <div key={idx} className="relative aspect-square overflow-hidden rounded-xl">
+            <Image 
+              src={img} 
+              alt={`Post content ${idx + 1}`} 
+              fill
+              className="object-cover"
+            />
+            {idx === 3 && images.length > 4 && (
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <span className="text-white text-2xl font-bold">+{images.length - 4}</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <article className="rounded-xl border border-zinc-200 bg-white/90 p-4 shadow-sm">
       <header className="mb-3 flex items-start gap-3">
-        <div className="h-10 w-10 flex-shrink-0 rounded-full bg-linear-to-br from-purple-500 to-pink-500" />
+        <div className="h-10 w-10 shrink-0 rounded-full bg-linear-to-br from-purple-500 to-pink-500" />
         <div className="flex-1">
           <div className="flex items-center gap-2"><span className="font-semibold text-gray-900">Sarah Anderson</span><span className="text-sm text-gray-500">{post.timestamp}</span></div>
           <p className="mt-2 text-gray-700">{post.content}</p>
-          {post.image && (<img src={post.image} alt="Post" className="mt-3 max-h-96 w-full rounded-xl object-cover" />)}
+          {renderImages()}
         </div>
       </header>
       <footer className="mt-4 flex items-center justify-center gap-8 md:justify-end">

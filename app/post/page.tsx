@@ -7,9 +7,12 @@ export default function PostPage() {
   const sp = useSearchParams();
   const id = sp.get("id") ?? "0";
   const content = sp.get("content") ?? "";
-  const image = sp.get("image") || "";
+  const imagesParam = sp.get("images") || sp.get("image") || "";
   const likes = Number(sp.get("likes") ?? 0);
   const timeAgo = sp.get("time") ?? "";
+
+  // Parse images - can be comma-separated for multiple images
+  const images = imagesParam ? imagesParam.split(',').filter(Boolean) : [];
 
   const post = {
     id,
@@ -17,7 +20,7 @@ export default function PostPage() {
     handle: "@sarah_anderson",
     verified: true,
     avatar: "", // optional placeholder
-    images: image ? [image] : [],
+    images: images,
     caption: content,
     hashtags: [],
     likes,
