@@ -29,9 +29,6 @@ export default function ProfilePage() {
       // Load follow stats
       const stats = await fetch('/api/follow/stats?accountId=' + encodeURIComponent(me.account._id), { cache: 'no-store' }).then(r => r.json()).catch(() => ({ followers:0, following:0 }));
       setCounts({ followers: stats.followers||0, following: stats.following||0 });
-      // Check isFollowing (self will be false, button hidden anyway)
-      const check = await fetch('/api/follow?count=1&followeeId=' + encodeURIComponent(me.account._id), { cache: 'no-store' }).then(r => r.json()).catch(() => ({ count:0 }));
-      // If endpoint used without followerId, count is for all followers; for self-view, we hide button anyway
       setIsFollowing(false);
       setLoading(false);
     })();
@@ -92,6 +89,9 @@ export default function ProfilePage() {
             {profile._id && (
               <Link href="/profile/edit" className="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 text-zinc-800">Edit Profile</Link>
             )}
+            {isSelf && (
+              <Link href="/post/create" className="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 text-zinc-800">New Post</Link>
+            )}
             {!isSelf && (
               isFollowing ? (
                 <button onClick={doUnfollow} disabled={followBusy} className="rounded-full px-4 py-2 text-sm font-medium ring-1 ring-zinc-300 text-zinc-800">Following</button>
@@ -131,7 +131,7 @@ export default function ProfilePage() {
                       <PostCard post={post} />
                       <div className="absolute inset-0" aria-label="Open post">
                         <Link
-                          href={`/post?id=${encodeURIComponent(String(post.id))}&content=${encodeURIComponent(post.content)}&images=${encodeURIComponent(imagesParam)}&likes=${post.likes}&commentCount=${post.comments}&time=${encodeURIComponent(post.timestamp)}`}
+                          href={`/post/${encodeURIComponent(String(post.id))}`}
                           className="absolute inset-0"
                         />
                       </div>

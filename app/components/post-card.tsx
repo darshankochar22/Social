@@ -11,7 +11,14 @@ export type Post = {
   timestamp: string;
 };
 
-export default function PostCard({ post }: { post: Post }) {
+type PostCardProps = {
+  post: Post;
+  authorName?: string;
+  authorUsername?: string;
+  authorAvatarUrl?: string | null;
+};
+
+export default function PostCard({ post, authorName, authorUsername, authorAvatarUrl }: PostCardProps) {
   // Handle both single image and multiple images
   const images = post.images && post.images.length > 0 ? post.images : (post.image ? [post.image] : []);
   
@@ -107,9 +114,13 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <article className="rounded-xl border border-zinc-200 bg-white/90 p-4 shadow-sm">
       <header className="mb-3 flex items-start gap-3">
-        <div className="h-10 w-10 shrink-0 rounded-full bg-linear-to-br from-purple-500 to-pink-500" />
+        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-linear-to-br from-purple-500 to-pink-500">
+          {authorAvatarUrl ? (
+            <img src={authorAvatarUrl} alt={authorName || authorUsername || 'avatar'} className="h-10 w-10 object-cover" />
+          ) : null}
+        </div>
         <div className="flex-1">
-          <div className="flex items-center gap-2"><span className="font-semibold text-gray-900">Sarah Anderson</span><span className="text-sm text-gray-500">{post.timestamp}</span></div>
+          <div className="flex items-center gap-2"><span className="font-semibold text-gray-900">{authorName || authorUsername || 'User'}</span><span className="text-sm text-gray-500">{post.timestamp}</span></div>
           <p className="mt-2 text-gray-700">{post.content}</p>
           {renderImages()}
         </div>

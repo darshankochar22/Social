@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
 import { postSchema } from "@/lib/schemas";
+import { getAccountIdFromRequest } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
 	const db = await getDb();
@@ -28,7 +29,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
 	const db = await getDb();
 	const json = await req.json();
-	const parsed = postSchema.safeParse({ ...json, createdAt: new Date(), updatedAt: new Date() });
+	const accountId = json.accountId || getAccountIdFromRequest(req);
+	const parsed = postSchema.safeParse({ ...json, accountId, createdAt: new Date(), updatedAt: new Date() });
 	if (!parsed.success) {
 		return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
 	}

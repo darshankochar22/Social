@@ -26,11 +26,12 @@ export const profileSchema = z.object({
 
 export type ProfileInput = z.infer<typeof profileSchema>;
 
+const relativeUrl = z.string().regex(/^\//, { message: "Invalid URL" });
+
 export const postSchema = z.object({
 	accountId: z.string(),
-	title: z.string().min(1).max(140),
 	content: z.string().min(1),
-	imageUrl: z.string().url().optional().nullable(),
+	imageUrl: z.union([z.string().url(), relativeUrl]).optional().nullable(),
 	tags: z.array(z.string()).optional().default([]),
 	createdAt: z.date().optional(),
 	updatedAt: z.date().optional(),
