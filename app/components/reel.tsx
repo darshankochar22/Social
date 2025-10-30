@@ -7,11 +7,11 @@ type ReelProps = {
 
 export default function Reel({ src, title = "", category = "", autoPlay = true }: ReelProps) {
   return (
-    <div className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-zinc-900 shadow-sm ring-1 ring-zinc-200/60">
+    <div className="relative aspect-[9/16] h-[80vh] max-h-[80vh] overflow-hidden rounded-3xl bg-black shadow-sm ring-1 ring-zinc-200/60">
       {/* media */}
       <video
         src={src}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-contain bg-black"
         muted
         playsInline
         loop

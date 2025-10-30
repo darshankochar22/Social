@@ -47,10 +47,20 @@ export default function ReelView({ src, title = '', category = 'Reel', id = 'ree
     }
   };
 
+  const hasSrc = !!src && src.trim().length > 0;
+
   return (
-    <div className="min-h-screen w-full bg-black flex items-center justify-center py-12">
-      <div className="relative mx-auto w-full max-w-[34rem]">
-        <Reel src={src} title={title} category={category} />
+    <div className="min-h-screen w-full bg-black flex items-center justify-center py-8">
+      <div className="relative mx-auto">
+        {hasSrc ? (
+          <Reel src={src} title={title} category={category} />
+        ) : (
+          <div className="relative aspect-[9/16] h-[80vh] max-h-[80vh] overflow-hidden rounded-3xl bg-zinc-800 ring-1 ring-white/10">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-zinc-300 text-sm">Video unavailable</span>
+            </div>
+          </div>
+        )}
         {/* right action bar */}
         <div className="absolute right-2 top-1/2 -translate-y-1/2 space-y-4 text-white">
           <button onClick={likeReel} disabled={isLiking} className="flex flex-col items-center text-white/90 hover:text-white"><Heart className="h-6 w-6" /><span className="text-xs">{likes}</span></button>

@@ -27,24 +27,26 @@ function formatTimestamp(value: string | number | Date | undefined): string {
 
 function PublicReelsCarousel({ reels }: { reels: DbReel[] }) {
   const items = reels.map((reel, idx) => (
-    <AppleCard
-      key={String(reel._id)}
-      card={{
-        src: reel.thumbnailUrl || '/vercel.svg',
-        title: reel.caption || 'Reel',
-        category: 'Reel',
-        content: (
-          <div className="relative">
-            <video
-              controls
-              src={reel.videoUrl}
-              className="h-full w-full rounded-xl bg-black"
-            />
-          </div>
-        ),
-      }}
-      index={idx}
-    />
+    <div key={String(reel._id)} className="relative">
+      <AppleCard
+        card={{
+          src: reel.thumbnailUrl || '/vercel.svg',
+          title: reel.caption || 'Reel',
+          category: 'Reel',
+          content: (
+            <div className="relative">
+              <video
+                controls
+                src={reel.videoUrl}
+                className="h-full w-full rounded-xl bg-black"
+              />
+            </div>
+          ),
+        }}
+        index={idx}
+      />
+      <a href={`/reel/${encodeURIComponent(String(reel._id))}`} className="absolute inset-0" aria-label="Open reel" />
+    </div>
   ));
   return <Carousel items={items} />;
 }
