@@ -63,10 +63,22 @@ export default function ReelView({ src, title = '', category = 'Reel', id = 'ree
         )}
         {/* right action bar */}
         <div className="absolute right-2 top-1/2 -translate-y-1/2 space-y-4 text-white">
-          <button onClick={likeReel} disabled={isLiking} className="flex flex-col items-center text-white/90 hover:text-white"><Heart className="h-6 w-6" /><span className="text-xs">{likes}</span></button>
-          <button className="flex flex-col items-center text-white/90 hover:text-white"><MessageCircle className="h-6 w-6" /><span className="text-xs">Comment</span></button>
-          <button className="flex flex-col items-center text-white/90 hover:text-white"><Send className="h-6 w-6" /><span className="text-xs">Share</span></button>
-          <button className="flex flex-col items-center text-white/90 hover:text-white"><Bookmark className="h-6 w-6" /><span className="text-xs">Save</span></button>
+          <button onClick={likeReel} disabled={isLiking} className="flex flex-col items-center text-white/90 hover:text-white gap-1">
+            <Heart className="h-6 w-6" />
+            <span className="text-xs">{likes}</span>
+          </button>
+          <button className="flex flex-col items-center text-white/90 hover:text-white gap-1">
+            <MessageCircle className="h-6 w-6" />
+            <span className="text-xs">Comment</span>
+          </button>
+          <button className="flex flex-col items-center text-white/90 hover:text-white gap-1">
+            <Send className="h-6 w-6" />
+            <span className="text-xs">Share</span>
+          </button>
+          <button className="flex flex-col items-center text-white/90 hover:text-white gap-1">
+            <Bookmark className="h-6 w-6" />
+            <span className="text-xs">Save</span>
+          </button>
         </div>
         {/* bottom caption */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4">

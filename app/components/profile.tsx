@@ -3,7 +3,7 @@ import { MapPin, Link as LinkIcon, Calendar, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import PostCard, { type Post } from '@/app/components/post-card';
 import { useRouter } from 'next/navigation';
-import { Carousel, Card as AppleCard } from '@/components/ui/apple-cards-carousel';
+import ReelsGrid from '@/app/components/reels-grid';
 
 type Profile = {
   accountId: string;
@@ -184,11 +184,11 @@ export default function ProfilePage() {
 
           {activeTab==='reels' && (
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 shadow-sm backdrop-blur">
-              <div className="px-2 py-4">
+              <div className="p-6">
                 {reels.length === 0 ? (
-                  <p className="px-4 text-zinc-600">No reels yet.</p>
+                  <p className="text-zinc-600">No reels yet.</p>
                 ) : (
-                  <ProfileReelsCarousel reels={reels} />
+                  <ReelsGrid reels={reels} />
                 )}
               </div>
             </div>
@@ -217,30 +217,4 @@ export default function ProfilePage() {
       </section>
     </div>
   );
-}
-
-function ProfileReelsCarousel({ reels }: { reels: DbReel[] }) {
-  const items = reels.map((reel, idx) => (
-    <div key={String(reel._id)} className="relative">
-      <AppleCard
-        card={{
-          src: reel.thumbnailUrl || '/vercel.svg',
-          title: reel.caption || 'Reel',
-          category: 'Reel',
-          content: (
-            <div className="relative">
-              <video
-                controls
-                src={reel.videoUrl}
-                className="h-full w-full rounded-xl bg-black"
-              />
-            </div>
-          ),
-        }}
-        index={idx}
-      />
-      <a href={`/reel/${encodeURIComponent(String(reel._id))}`} className="absolute inset-0" aria-label="Open reel" />
-    </div>
-  ));
-  return <Carousel items={items} />;
 }
