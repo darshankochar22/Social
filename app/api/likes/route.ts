@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
 	if (targetId) filter.targetId = targetId;
 	if (accountId) filter.accountId = accountId;
 
-	if (countOnly && targetType && targetId) {
-		const count = await db.collection("likes").countDocuments({ targetType, targetId });
+	if (countOnly) {
+		const count = await db.collection("likes").countDocuments(filter);
 		return NextResponse.json({ count });
 	}
 

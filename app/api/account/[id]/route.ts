@@ -3,18 +3,25 @@ import { getDb } from "@/lib/mongodb";
 import { accountSchema } from "@/lib/schemas";
 import { ObjectId } from "mongodb";
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
-	const db = await getDb();
-	const id = params.id;
-	if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
-	const account = await db.collection("accounts").findOne({ _id: new ObjectId(id) });
-	if (!account) return NextResponse.json({ error: "Not found" }, { status: 404 });
-	return NextResponse.json(account);
+async function unwrapParams(ctx: any) {
+  if (ctx?.params && typeof ctx.params.then === 'function') {
+    return await ctx.params;
+  }
+  return ctx.params;
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-	const db = await getDb();
-	const id = params.id;
+export async function GET(_req: NextRequest, ctx: any) {
+    const db = await getDb();
+    const { id } = await unwrapParams(ctx);
+    if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    const account = await db.collection("accounts").findOne({ _id: new ObjectId(id) });
+    if (!account) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(account);
+}
+
+export async function PUT(req: NextRequest, ctx: any) {
+    const db = await getDb();
+    const { id } = await unwrapParams(ctx);
 	if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 	const json = await req.json();
 	const parsed = accountSchema.partial().safeParse({ ...json, updatedAt: new Date() });
@@ -26,9 +33,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 	return NextResponse.json(updated);
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
-	const db = await getDb();
-	const id = params.id;
+export async function DELETE(_req: NextRequest, ctx: any) {
+    const db = await getDb();
+    const { id } = await unwrapParams(ctx);
 	if (!ObjectId.isValid(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 	await db.collection("accounts").deleteOne({ _id: new ObjectId(id) });
 	return NextResponse.json({ ok: true });

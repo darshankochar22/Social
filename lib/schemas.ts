@@ -42,7 +42,7 @@ export type PostInput = z.infer<typeof postSchema>;
 export const reelSchema = z.object({
 	accountId: z.string(),
 	caption: z.string().max(2200).optional().nullable(),
-	videoUrl: z.string().url(),
+  videoUrl: z.union([z.string().url(), relativeUrl]),
 	thumbnailUrl: z.string().url().optional().nullable(),
 	durationSec: z.number().int().min(0).max(600),
 	createdAt: z.date().optional(),

@@ -59,11 +59,6 @@ export default function HomeFeed() {
         return (
           <div key={post.id} className="relative">
             <PostCard post={post} />
-            <Link
-              href={`/post?id=${post.id}&content=${encodeURIComponent(post.content)}&images=${encodeURIComponent(imagesParam)}&likes=${post.likes}&commentCount=${post.comments}&time=${encodeURIComponent(post.timestamp)}`}
-              className="absolute inset-0"
-              aria-label="Open post"
-            />
           </div>
         );
       })}

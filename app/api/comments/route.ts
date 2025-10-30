@@ -8,12 +8,18 @@ export async function GET(req: NextRequest) {
 	const url = new URL(req.url);
 	const targetType = url.searchParams.get("targetType");
 	const targetId = url.searchParams.get("targetId");
+    const countOnly = url.searchParams.get("count") === "1";
 	const limit = Math.min(parseInt(url.searchParams.get("limit") || "20", 10), 100);
 	const skip = parseInt(url.searchParams.get("skip") || "0", 10);
 
 	const filter: Record<string, unknown> = {};
 	if (targetType) filter.targetType = targetType;
 	if (targetId) filter.targetId = targetId;
+
+    if (countOnly) {
+        const count = await db.collection("comments").countDocuments(filter);
+        return NextResponse.json({ count });
+    }
 
 	const comments = await db
 		.collection("comments")
