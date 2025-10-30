@@ -3,6 +3,7 @@
 import Link from "next/link";
 import PostCard from "@/app/components/post-card";
 import type { Post } from "@/app/components/post-card";
+import BottomNavBar from "@/app/components/bottom-navbar"; 
 
 const sampleImages = [
   "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1600&auto=format&fit=crop",
@@ -51,6 +52,7 @@ const feed: Post[] = Array.from({ length: 25 }, (_, idx) => {
 
 export default function HomeFeed() {
   return (
+    <div className="min-h-screen bg-gray-50 pb-20"> 
     <main className="mx-auto max-w-3xl px-4 py-8 space-y-6">
       {feed.map((post) => {
         const imagesParam = post.images?.join(',') || post.image || '';
@@ -66,6 +68,9 @@ export default function HomeFeed() {
         );
       })}
     </main>
+    {/* Bottom Navigation Bar */}
+    <BottomNavBar />
+    </div>
   );
 }
 
