@@ -1,19 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, TrendingUp, Sparkles, X } from "lucide-react";
+import { Users, Search, TrendingUp, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import BottomNavBar from "@/app/components/bottom-navbar";
 import { FocusCards } from "@/components/ui/focus-cards";
-import { useRouter } from "next/navigation"; 
-import BottomNavBar from "@/app/components/bottom-navbar"; 
 
 export default function CommunitiesPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
-  const [filterCategory, setFilterCategory] = useState<"all" | "popular" | "new">("all");
 
-  const router = useRouter(); 
-
-  
   const allCommunities = [
     {
       title: "Fashion & Style",
@@ -67,100 +63,90 @@ export default function CommunitiesPage() {
     },
   ];
 
-  // Filter based on search
   const filtered = allCommunities.filter((c) =>
     c.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-gray-50 via-pink-50/20 to-purple-50/20 pb-20">
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-pink-50/20 to-purple-50/20 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-24">
       {/* Header */}
-      <div className="bg-gradient-to-br from-pink-500 via-rose-500 to-purple-500 text-white sticky top-0 z-40 shadow-lg">
-        <div className="max-w-3xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold mb-1">Communities</h1>
-              <p className="text-pink-50 text-sm">Find your tribe ✨</p>
-            </div>
-
-            {/* Search Toggle */}
-            <button
-              onClick={() => setShowSearch(!showSearch)}
-              className="p-2 rounded-xl bg-white/20 backdrop-blur-sm active:bg-white/30 transition-all"
-            >
-              {showSearch ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
-            </button>
+      <div className="bg-gradient-to-br from-pink-500 via-rose-500 to-purple-500 text-white shadow-lg">
+        <div className="max-w-6xl mx-auto px-4 pt-8 pb-6">
+          <div className="flex items-center gap-3 mb-3">
+            <Users className="w-8 h-8" />
+            <h1 className="text-3xl font-bold">Communities</h1>
           </div>
+          <p className="text-pink-50 text-base mb-4">
+            Find your tribe, share your passion, grow together
+          </p>
 
-          {/* Search Input */}
-          {showSearch && (
-            <div className="mb-4 animate-in slide-in-from-top duration-300">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search communities..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/95 backdrop-blur text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 text-sm"
-                  autoFocus
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            <button
-              onClick={() => setFilterCategory("all")}
-              className={`px-4 py-1.5 rounded-full font-medium text-xs transition-all ${
-                filterCategory === "all"
-                  ? "bg-white text-pink-500 shadow-md"
-                  : "bg-white/20 text-white"
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterCategory("popular")}
-              className={`px-4 py-1.5 rounded-full font-medium text-xs transition-all flex items-center gap-1.5 ${
-                filterCategory === "popular"
-                  ? "bg-white text-pink-500 shadow-md"
-                  : "bg-white/20 text-white"
-              }`}
-            >
-              <TrendingUp className="w-3.5 h-3.5" />
-              Popular
-            </button>
-            <button
-              onClick={() => setFilterCategory("new")}
-              className={`px-4 py-1.5 rounded-full font-medium text-xs transition-all flex items-center gap-1.5 ${
-                filterCategory === "new"
-                  ? "bg-white text-pink-500 shadow-md"
-                  : "bg-white/20 text-white"
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              New
-            </button>
+          {/* Search Bar */}
+          <div className="relative max-w-xl">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search communities..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/95 backdrop-blur text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-lg"
+            />
           </div>
         </div>
       </div>
 
-      {/* Focus Cards Section */}
-      <div className="max-w-5xl mx-auto px-4 py-10">
+      {/* Stats Section - Fixed */}
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-xl p-4 shadow-md text-center">
+            <div className="text-2xl font-bold text-pink-500">
+              {allCommunities.length}
+            </div>
+            <div className="text-sm text-gray-600 mt-1">Communities</div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow-md text-center">
+            <div className="text-2xl font-bold text-purple-500">150K+</div>
+            <div className="text-sm text-gray-600 mt-1">Members</div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow-md text-center">
+            <div className="text-2xl font-bold text-rose-500">2.5M+</div>
+            <div className="text-sm text-gray-600 mt-1">Posts</div>
+          </div>
+        </div>
+
+        {/* Section Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-pink-500" />
+            <h2 className="text-xl font-bold text-gray-800">
+              {searchQuery ? "Search Results" : "All Communities"}
+            </h2>
+          </div>
+         {/*  <div className="flex items-center gap-2 text-sm text-gray-600">
+            <TrendingUp className="w-4 h-4" />
+            <span>Tap to explore</span>
+          </div> */}
+        </div> 
+
+        {/* FocusCards Grid */}
         <FocusCards
           cards={filtered.map((c) => ({
             title: c.title,
             src: c.src,
-            onClick: () => router.push(c.path), // 👈 navigate on click
+            onClick: () => router.push(c.path),
           }))}
         />
+
+        {filtered.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">🔍</div>
+            <p className="text-gray-500 text-xl font-medium">No communities found</p>
+            <p className="text-gray-400 text-base mt-2">Try a different search</p>
+          </div>
+        )}
       </div>
-    </div>
-   {/* Bottom Navigation */}
-   <BottomNavBar />
+
+      {/* Bottom Navigation */}
+      <BottomNavBar />
     </div>
   );
 }
